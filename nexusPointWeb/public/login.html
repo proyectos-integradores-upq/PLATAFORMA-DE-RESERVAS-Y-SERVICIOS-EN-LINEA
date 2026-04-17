@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NexusPoint | Login</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-branding">
+            <img src="img/logo.png" alt="NexusPoint Logo" class="big-logo">
+        </div>
+        <div class="login-form-side">
+            <div class="form-content">
+                <h2><span class="text-secundario">Nexus</span>Point</h2>
+                <p>Ingresa tus credenciales para acceder</p>
+                
+                <form id="loginForm">
+                    <div class="input-group">
+                        <p>Correo electrónico</p>
+                        <input type="email" id="email" placeholder="ejemplo@nexuspoint.com" required>
+                    </div>
+                    <div class="input-group">
+                        <p>Contraseña</p>
+                        <input type="password" id="password" placeholder="•••••••••" required>
+                    </div>
+                    <div class="forgot-container">
+                        <a href="Recuperar-Pass.html" class="forgot-link">¿Olvidaste tu contraseña?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit">ENTRAR</button>
+                    
+                    <p id="msg" class="msg" style="margin-top: 15px; text-align: center; font-size: 0.9rem;"></p>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="/js/login.js"></script>
+</body>
+</html>

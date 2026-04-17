@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Usuarios | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        .btn-nuevo-usuario {
+            display: inline-flex; align-items: center; justify-content: center;
+            background-color: var(--color-secundario); color: white !important;
+            padding: 12px 28px; border-radius: 50px; text-decoration: none;
+            font-weight: 700; font-size: 0.9rem; border: 2px solid var(--color-primario);
+            transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(62, 181, 188, 0.2);
+        }
+        .btn-nuevo-usuario:hover {
+            background-color: var(--color-primario); color: var(--color-secundario) !important;
+            transform: translateY(-2px); box-shadow: 0 6px 15px rgba(62, 181, 188, 0.4);
+        }
+        .actions-wrapper { display: flex; gap: 10px; justify-content: center; }
+        .btn-action {
+            width: 35px; height: 35px; border-radius: 8px;
+            display: inline-flex; align-items: center; justify-content: center;
+            border: none; cursor: pointer; transition: opacity 0.2s;
+        }
+
+        /* MODAL ELIMINAR */
+        .modal-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(40, 53, 102, 0.7); display: none;
+            justify-content: center; align-items: center; z-index: 3000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white; padding: 30px; border-radius: 15px;
+            text-align: center; max-width: 400px; width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-btns { display: flex; gap: 10px; justify-content: center; margin-top: 20px; }
+        .btn-confirm-delete { background: var(--danger); color: white; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700; }
+        .btn-cancel { background: #eee; border: none; padding: 10px 20px; border-radius: 50px; cursor: pointer; font-weight: 700; }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="NP" class="mini-logo">
+                <span>NexusPoint</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="solicitudes.html">Solicitudes</a></li>
+                <li><a href="espacios.html">Espacios</a></li>
+                <li><a href="usuarios.html" class="active">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="perfil.html" class="sidebar-user-link" style="border-color: var(--color-primario); background: rgba(255,255,255,0.1);">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">Súper Usuario</span>
+                    </div>
+                </a>
+                <a href="login.html" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <h1>Gestión de <span class="text-primario">Usuarios</span></h1>
+                    <p style="color: var(--color-secundario); opacity: 0.8;">Administra el personal y sus permisos en el sistema.</p>
+                </div>
+                <a href="usuarios-form.html" class="btn-nuevo-usuario">+ Nuevo Usuario</a>
+            </header>
+
+            <section class="search-bar-container">
+                <div class="search-box">
+                    <input type="text" id="userSearch" placeholder="Buscar por nombre o matrícula..." onkeyup="filterUsers()">
+                </div>
+            </section>
+
+            <section class="table-container" style="margin-top: 20px;">
+                <table id="usersTable">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Nombre Completo</th>
+                            <th>Correo</th>
+                            <th>Departamento</th>
+                            <th>Rol</th>
+                            <th>Estado</th>
+                            <th style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>D001234</td><td><strong>Santiago Alcaraz Ferrusca</strong></td><td>santiago.alcaraz@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001234" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Santiago Alcaraz Ferrusca')">🗑</button></div></td></tr>
+                        <tr><td>A000001</td><td><strong>Cano Sandoval Ana Sofía</strong></td><td>ana.cano@nexuspoint.edu</td><td>Administración</td><td><span class="badge badge-admin">Admin</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=A000001" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Cano Sandoval Ana Sofía')">🗑</button></div></td></tr>
+                        <tr><td>D001235</td><td><strong>Luis Eduardo Arias Garcia</strong></td><td>luis.arias@nexuspoint.edu</td><td>Electrónica</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001235" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Luis Eduardo Arias Garcia')">🗑</button></div></td></tr>
+                        <tr><td>D001236</td><td><strong>Jovanny Barron Mata</strong></td><td>jovanny.barron@nexuspoint.edu</td><td>Industrial</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-pending">Pendiente</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001236" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Jovanny Barron Mata')">🗑</button></div></td></tr>
+                        <tr><td>D001237</td><td><strong>Daniel Alexandro Castelo Castillo</strong></td><td>daniel.castelo@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001237" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Daniel Alexandro Castelo Castillo')">🗑</button></div></td></tr>
+                        <tr><td>D001238</td><td><strong>Cristobal Eduardo Cervantes Santana</strong></td><td>cristobal.cervantes@nexuspoint.edu</td><td>Industrial</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001238" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Cristobal Eduardo Cervantes Santana')">🗑</button></div></td></tr>
+                        <tr><td>P000550</td><td><strong>Gerardo Chacon Alvarez</strong></td><td>gerardo.chacon@nexuspoint.edu</td><td>Mantenimiento</td><td><span class="badge badge-personal">Personal</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=P000550" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Gerardo Chacon Alvarez')">🗑</button></div></td></tr>
+                        <tr><td>D001239</td><td><strong>Juan Pablo Cipriano Alvarez</strong></td><td>juan.cipriano@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-suspended">Suspendido</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001239" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Juan Pablo Cipriano Alvarez')">🗑</button></div></td></tr>
+                        <tr><td>D001240</td><td><strong>Antonio Garcia Juarez</strong></td><td>antonio.garcia@nexuspoint.edu</td><td>Electrónica</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001240" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Antonio Garcia Juarez')">🗑</button></div></td></tr>
+                        <tr><td>A000002</td><td><strong>Mariana Garcia Olvera</strong></td><td>mariana.garcia@nexuspoint.edu</td><td>Administración</td><td><span class="badge badge-admin">Admin</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=A000002" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Mariana Garcia Olvera')">🗑</button></div></td></tr>
+                        <tr><td>D001241</td><td><strong>Andres Gonzalez Leon</strong></td><td>andres.gonzalez@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001241" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Andres Gonzalez Leon')">🗑</button></div></td></tr>
+                        <tr><td>D001242</td><td><strong>Diana Sofia Hernandez Espinoza</strong></td><td>diana.hernandez@nexuspoint.edu</td><td>Industrial</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-pending">Pendiente</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001242" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Diana Sofia Hernandez Espinoza')">🗑</button></div></td></tr>
+                        <tr><td>P000551</td><td><strong>Jose Luis Huante Rios</strong></td><td>jose.huante@nexuspoint.edu</td><td>Mantenimiento</td><td><span class="badge badge-personal">Personal</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=P000551" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Jose Luis Huante Rios')">🗑</button></div></td></tr>
+                        <tr><td>A000003</td><td><strong>Valentina Jimenez Perez</strong></td><td>valentina.jimenez@nexuspoint.edu</td><td>Administración</td><td><span class="badge badge-admin">Admin</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=A000003" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Valentina Jimenez Perez')">🗑</button></div></td></tr>
+                        <tr><td>D001243</td><td><strong>Lizeth Fernanda Juarez Garcia</strong></td><td>lizeth.juarez@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001243" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Lizeth Fernanda Juarez Garcia')">🗑</button></div></td></tr>
+                        <tr><td>D001244</td><td><strong>Isaac Lopez Madrigal</strong></td><td>isaac.lopez@nexuspoint.edu</td><td>Electrónica</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001244" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Isaac Lopez Madrigal')">🗑</button></div></td></tr>
+                        <tr><td>A000004</td><td><strong>Regina Lopez Soto</strong></td><td>regina.lopez@nexuspoint.edu</td><td>Finanzas</td><td><span class="badge badge-admin">Admin</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=A000004" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Regina Lopez Soto')">🗑</button></div></td></tr>
+                        <tr><td>D001245</td><td><strong>Luis Mariano Martinez Mondragon</strong></td><td>luis.martinez@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001245" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Luis Mariano Martinez Mondragon')">🗑</button></div></td></tr>
+                        <tr><td>D001246</td><td><strong>Jose Julian Mendoza Martinez</strong></td><td>jose.mendoza@nexuspoint.edu</td><td>Industrial</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-suspended">Suspendido</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001246" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Jose Julian Mendoza Martinez')">🗑</button></div></td></tr>
+                        <tr><td>P000552</td><td><strong>Felipe De Jesus Munguia Guerrero</strong></td><td>felipe.munguia@nexuspoint.edu</td><td>Seguridad</td><td><span class="badge badge-personal">Personal</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=P000552" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Felipe De Jesus Munguia Guerrero')">🗑</button></div></td></tr>
+                        <tr><td>D001247</td><td><strong>Juan Pablo Ordaz Magos</strong></td><td>juan.ordaz@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001247" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Juan Pablo Ordaz Magos')">🗑</button></div></td></tr>
+                        <tr><td>D001248</td><td><strong>Balderas González Ricardo Sebastián</strong></td><td>ricardo.balderas@nexuspoint.edu</td><td>Industrial</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001248" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Balderas González Ricardo Sebastián')">🗑</button></div></td></tr>
+                        <tr><td>D001249</td><td><strong>Carlos Uriel Ruiz Arvizu</strong></td><td>carlos.ruiz@nexuspoint.edu</td><td>Electrónica</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-pending">Pendiente</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001249" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Carlos Uriel Ruiz Arvizu')">🗑</button></div></td></tr>
+                        <tr><td>A000005</td><td><strong>MARCO EDGAR TREJO ZAVALA</strong></td><td>marco.trejo@nexuspoint.edu</td><td>Sistemas</td><td><span class="badge badge-admin">Admin</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=A000005" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('MARCO EDGAR TREJO ZAVALA')">🗑</button></div></td></tr>
+                        <tr><td>D001250</td><td><strong>Vanesa Alejandra Vazquez</strong></td><td>vanesa.vazquez@nexuspoint.edu</td><td>Industrial</td><td><span class="badge badge-docente">Docente</span></td><td><span class="status status-approved">Activo</span></td><td><div class="actions-wrapper"><a href="usuarios-form.html?id=D001250" class="btn-action btn-edit">✎</a><button class="btn-action btn-delete" onclick="openDeleteModal('Vanesa Alejandra Vazquez')">🗑</button></div></td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="color: var(--color-secundario); margin-bottom: 10px;">¿Eliminar usuario?</h2>
+            <p>Estás a punto de eliminar a <strong id="userNameToDelete"></strong>.</p>
+            <div class="modal-btns">
+                <button class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+                <button class="btn-confirm-delete" onclick="confirmDelete()">Eliminar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let userToDelete = "";
+        function openDeleteModal(name) {
+            userToDelete = name;
+            document.getElementById('userNameToDelete').innerText = name;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+        function closeDeleteModal() { document.getElementById('deleteModal').style.display = 'none'; }
+        function confirmDelete() { alert(userToDelete + " eliminado."); closeDeleteModal(); }
+
+        function filterUsers() {
+            let input = document.getElementById("userSearch").value.toUpperCase();
+            let rows = document.getElementById("usersTable").getElementsByTagName("tr");
+            for (let i = 1; i < rows.length; i++) {
+                let text = rows[i].innerText.toUpperCase();
+                rows[i].style.display = text.indexOf(input) > -1 ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>

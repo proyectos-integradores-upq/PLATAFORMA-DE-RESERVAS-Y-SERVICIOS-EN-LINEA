@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Solicitudes | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        /* ESTILOS DE MODAL AÑADIDOS */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(40, 53, 102, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn-confirm {
+            background-color: var(--color-secundario);
+            color: white;
+            border: 2px solid var(--color-primario);
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+        .btn-cancel {
+            background-color: #eee;
+            color: #333;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="NP" class="mini-logo">
+                <span>NexusPoint</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="solicitudes.html" class="active">Solicitudes</a></li>
+                <li><a href="espacios.html">Espacios</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="perfil.html" class="sidebar-user-link" style="border-color: var(--color-primario); background: rgba(255,255,255,0.1);">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">Súper Usuario</span>
+                    </div>
+                </a>
+                <a href="login.html" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header">
+                <h1>Gestión de <span class="text-primario">Solicitudes</span></h1>
+                <p>Revisa y gestiona las reservas de espacios de la institución.</p>
+            </header>
+
+            <section class="search-bar-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar por matrícula o solicitante..." onkeyup="filterTable()">
+                </div>
+            </section>
+
+            <section class="table-container">
+                <table id="requestsTable">
+                    <thead>
+                        <tr>
+                            <th>Matrícula</th>
+                            <th>Solicitante</th>
+                            <th>Espacio</th>
+                            <th>Fecha</th>
+                            <th>Horario</th>
+                            <th>Estatus</th>
+                            <th style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>20210345</td>
+                            <td><strong>Santiago Alcaraz Ferrusca</strong></td>
+                            <td>Cubículo 1 - Edif. D</td>
+                            <td>15/03/2026</td>
+                            <td>10:00 - 12:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220912</td>
+                            <td><strong>Cano Sandoval Ana Sofía</strong></td>
+                            <td>Laboratorio 3 - Edif. C</td>
+                            <td>14/03/2026</td>
+                            <td>08:00 - 10:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210567</td>
+                            <td><strong>Luis Eduardo Arias Garcia</strong></td>
+                            <td>Auditorio Central</td>
+                            <td>16/03/2026</td>
+                            <td>12:00 - 14:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20230122</td>
+                            <td><strong>Jovanny Barron Mata</strong></td>
+                            <td>Sala de Juntas B</td>
+                            <td>15/03/2026</td>
+                            <td>09:00 - 11:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210889</td>
+                            <td><strong>Daniel Alexandro Castelo Castillo</strong></td>
+                            <td>Cancha Techada</td>
+                            <td>17/03/2026</td>
+                            <td>16:00 - 18:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220441</td>
+                            <td><strong>Cristobal Eduardo Cervantes Santana</strong></td>
+                            <td>Centro de Cómputo</td>
+                            <td>18/03/2026</td>
+                            <td>11:00 - 13:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210023</td>
+                            <td><strong>Gerardo Chacon Alvarez</strong></td>
+                            <td>Laboratorio 1 - Edif. A</td>
+                            <td>15/03/2026</td>
+                            <td>07:00 - 09:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20230554</td>
+                            <td><strong>Juan Pablo Cipriano Alvarez</strong></td>
+                            <td>Cubículo 4 - Biblioteca</td>
+                            <td>19/03/2026</td>
+                            <td>14:00 - 16:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220776</td>
+                            <td><strong>Antonio Garcia Juarez</strong></td>
+                            <td>Aula Magna</td>
+                            <td>15/03/2026</td>
+                            <td>10:00 - 12:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210991</td>
+                            <td><strong>Mariana Garcia Olvera</strong></td>
+                            <td>Taller de Diseño</td>
+                            <td>20/03/2026</td>
+                            <td>08:00 - 11:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20221102</td>
+                            <td><strong>Andres Gonzalez Leon</strong></td>
+                            <td>Sala Audiovisual</td>
+                            <td>15/03/2026</td>
+                            <td>13:00 - 15:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210332</td>
+                            <td><strong>Diana Sofia Hernandez Espinoza</strong></td>
+                            <td>Cubículo 2 - Edif. D</td>
+                            <td>21/03/2026</td>
+                            <td>10:00 - 12:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220198</td>
+                            <td><strong>Jose Luis Huante Rios</strong></td>
+                            <td>Laboratorio de Química</td>
+                            <td>15/03/2026</td>
+                            <td>15:00 - 17:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20230882</td>
+                            <td><strong>Valentina Jimenez Perez</strong></td>
+                            <td>Sala de Música</td>
+                            <td>22/03/2026</td>
+                            <td>11:00 - 13:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210443</td>
+                            <td><strong>Lizeth Fernanda Juarez Garcia</strong></td>
+                            <td>Cubículo 5 - Edif. B</td>
+                            <td>15/03/2026</td>
+                            <td>09:00 - 10:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220665</td>
+                            <td><strong>Isaac Lopez Madrigal</strong></td>
+                            <td>Cancha de Futbol</td>
+                            <td>23/03/2026</td>
+                            <td>17:00 - 19:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220912</td>
+                            <td><strong>Regina Lopez Soto</strong></td>
+                            <td>Laboratorio 3 - Edif. C</td>
+                            <td>14/03/2026</td>
+                            <td>08:00 - 10:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210771</td>
+                            <td><strong>Luis Mariano Martinez Mondragon</strong></td>
+                            <td>Sala de Juicios Orales</td>
+                            <td>15/03/2026</td>
+                            <td>12:00 - 14:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20230221</td>
+                            <td><strong>Jose Julian Mendoza Martinez</strong></td>
+                            <td>Aula Virtual 1</td>
+                            <td>24/03/2026</td>
+                            <td>10:00 - 12:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210552</td>
+                            <td><strong>Felipe De Jesus Munguia Guerrero</strong></td>
+                            <td>Laboratorio de Física</td>
+                            <td>15/03/2026</td>
+                            <td>07:00 - 09:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220003</td>
+                            <td><strong>Juan Pablo Ordaz Magos</strong></td>
+                            <td>Cubículo 8 - Edif. F</td>
+                            <td>25/03/2026</td>
+                            <td>14:00 - 16:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210884</td>
+                            <td><strong>Balderas González Ricardo Sebastián</strong></td>
+                            <td>Sala de Simulación</td>
+                            <td>15/03/2026</td>
+                            <td>11:00 - 13:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220334</td>
+                            <td><strong>Carlos Uriel Ruiz Arvizu</strong></td>
+                            <td>Taller de Mecatrónica</td>
+                            <td>26/03/2026</td>
+                            <td>16:00 - 19:00</td>
+                            <td><span class="status status-approved">Aprobado</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20210111</td>
+                            <td><strong>MARCO EDGAR TREJO ZAVALA</strong></td>
+                            <td>Sala de Postgrado</td>
+                            <td>15/03/2026</td>
+                            <td>09:00 - 11:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>20220998</td>
+                            <td><strong>Vanesa Alejandra Vazquez</strong></td>
+                            <td>Jardín Central</td>
+                            <td>27/03/2026</td>
+                            <td>10:00 - 12:00</td>
+                            <td><span class="status status-pending">Pendiente</span></td>
+                            <td>
+                                <div class="actions-wrapper" style="display: flex; gap: 10px; justify-content: center;">
+                                    <button class="btn-action btn-edit" title="Aprobar" onclick="openModal('aprobar')">✓</button>
+                                    <button class="btn-action btn-delete" title="Rechazar" onclick="openModal('rechazar')">✕</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <div id="actionModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 id="modalTitle" style="color: var(--color-secundario);">Título</h3>
+            <p id="modalText" style="margin-top: 10px; color: #666;">¿Estás seguro de realizar esta acción?</p>
+            <div class="modal-btns">
+                <button class="btn-cancel" onclick="closeModal()">Cancelar</button>
+                <button class="btn-confirm" onclick="confirmAction()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentAction = "";
+
+        function openModal(action) {
+            currentAction = action;
+            const modal = document.getElementById('actionModal');
+            const title = document.getElementById('modalTitle');
+            const text = document.getElementById('modalText');
+
+            if(action === 'aprobar') {
+                title.innerText = "✓ Aprobar Solicitud";
+                text.innerText = "¿Deseas marcar esta solicitud como aprobada?";
+            } else {
+                title.innerText = "✕ Rechazar Solicitud";
+                text.innerText = "¿Deseas rechazar esta solicitud? El usuario será notificado.";
+            }
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            document.getElementById('actionModal').style.display = 'none';
+        }
+
+        function confirmAction() {
+            alert("Acción realizada: " + (currentAction === 'aprobar' ? "Aprobado" : "Rechazado"));
+            closeModal();
+        }
+
+        function filterTable() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById("requestsTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                const tdMatricula = tr[i].getElementsByTagName("td")[0];
+                const tdNombre = tr[i].getElementsByTagName("td")[1];
+                if (tdMatricula || tdNombre) {
+                    const textValue = (tdMatricula.textContent || tdMatricula.innerText) + 
+                                      (tdNombre.textContent || tdNombre.innerText);
+                    if (textValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>

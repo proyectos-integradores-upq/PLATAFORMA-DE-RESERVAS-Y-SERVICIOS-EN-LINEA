@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Editar Perfil | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header"><img src="img/logo.png" alt="NP" class="mini-logo"><span>NexusPoint</span></div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="solicitudes.html">Solicitudes</a></li>
+                <li><a href="espacios.html">Espacios</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <a href="login.html" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header">
+                <div><h1>Editar <span class="text-primario">Información</span></h1><p>Modifica tus datos de contacto.</p></div>
+            </header>
+
+            <section class="form-container-white">
+                <form id="profileForm" class="grid-form">
+                    <div class="input-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" value="Administrador NexusPoint">
+                    </div>
+                    <div class="input-group">
+                        <label>Correo Electrónico</label>
+                        <input type="email" value="admin@nexuspoint.edu.mx">
+                    </div>
+                    <div class="input-group">
+                        <label>Teléfono de Contacto</label>
+                        <input type="text" placeholder="555-123-4567">
+                    </div>
+                    <div class="input-group">
+                        <label>Departamento</label>
+                        <select class="custom-select">
+                            <option selected>Sistemas / TI</option>
+                            <option>Administración</option>
+                            <option>Recursos Humanos</option>
+                        </select>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="button" class="btn-submit" onclick="showModal('confirmSaveModal')" style="border-radius: 50px; padding: 12px 35px;">
+                            Guardar Cambios
+                        </button>
+                        <a href="perfil.html" class="btn-cancelar" style="border-radius: 50px;">Cancelar</a>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <div id="confirmSaveModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3>¿Guardar cambios?</h3>
+            <p>Se actualizará tu información en todo el sistema.</p>
+            <div class="modal-actions">
+                <button class="btn-cancelar" onclick="hideModal('confirmSaveModal')">Revisar</button>
+                <button class="btn-submit" onclick="finalizeSave()">Confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <h3 style="color: var(--color-primario);">✔ ¡Éxito!</h3>
+            <p>La información se guardó correctamente.</p>
+            <button class="btn-submit" onclick="goToProfile()">Aceptar</button>
+        </div>
+    </div>
+
+    <script>
+        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function hideModal(id) { document.getElementById(id).style.display = 'none'; }
+        
+        function finalizeSave() {
+            hideModal('confirmSaveModal');
+            showModal('successModal');
+        }
+
+        function goToProfile() {
+            window.location.href = "perfil.html";
+        }
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,810 @@
+/* =========================================
+   1. VARIABLES Y BASES
+   ========================================= */
+:root {
+    --color-primario: #3eb5bc;
+    --color-secundario: #283566;
+    --bg-dashboard: #f5f7fa;
+    --white: #ffffff;
+    --text-dark: #283566;
+    --text-light: #ffffff;
+    --danger: #ff5e5e;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body, html {
+    height: 100%;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--bg-dashboard);
+}
+
+/* Utilidades de color de texto */
+.text-primario   { color: var(--color-primario); }
+.text-secundario { color: var(--color-secundario); }
+
+
+/* =========================================
+   2. ESTILOS DE LOGIN Y RECUPERACIÓN
+   ========================================= */
+.login-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+}
+
+.login-branding,
+.login-form-side {
+    flex: 1;
+    background: linear-gradient(to top, var(--color-secundario) 0%, var(--color-primario) 100%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 40px;
+}
+
+.login-branding { flex: 0.8; }
+
+.big-logo {
+    width: 80%;
+    max-width: 600px;
+    filter: drop-shadow(0 15px 25px rgba(0,0,0,0.3));
+}
+
+.form-content {
+    width: 100%;
+    max-width: 380px;
+    background: rgba(255, 255, 255, 0.10);
+    padding: 36px 32px;
+    border-radius: 16px;
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.15);
+    color: var(--text-light);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+
+.form-content h2 {
+    font-size: 1.9rem;
+    color: white;
+    text-align: center;
+    margin-bottom: 6px;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+}
+
+/* El span del título mantiene el color primario */
+.form-content h2 .text-secundario {
+    color: var(--color-primario);
+}
+
+/* Subtítulo del login — sólo el <p> directo hijo del form-content */
+.form-content > p:first-of-type {
+    text-align: center;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 24px;
+    font-size: 0.875rem;
+}
+
+/* Grupos de inputs en el login */
+.form-content .input-group {
+    margin-bottom: 14px;
+}
+
+/*  *** FIX PRINCIPAL ***
+    El HTML de login usa <p> como etiqueta (en vez de <label>).
+    Aplicamos el mismo estilo a ambos para que funcione sin cambiar el HTML. */
+.form-content .input-group label,
+.form-content .input-group p {
+    color: rgba(255,255,255,0.85);
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* Eliminar el margin extra de los <p> vacíos usados como separadores */
+.form-content .input-group p:empty {
+    display: none;
+}
+
+.form-content .input-group input {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.10);
+    color: var(--text-light);
+    font-size: 0.95rem;
+    outline: none;
+    transition: border 0.2s, background 0.2s;
+}
+
+.form-content .input-group input::placeholder {
+    color: rgba(255,255,255,0.38);
+}
+
+.form-content .input-group input:focus {
+    border-color: var(--color-primario);
+    background: rgba(255,255,255,0.15);
+}
+
+/* Enlace "¿Olvidaste tu contraseña?" */
+.forgot-container {
+    text-align: right;
+    margin-bottom: 16px;
+}
+
+.forgot-link {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.8rem;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.forgot-link:hover {
+    color: var(--color-primario);
+}
+
+/* Botón submit dentro del login (ancho completo) */
+.form-content .btn-submit {
+    width: 100%;
+    padding: 11px;
+    background: var(--color-primario);
+    color: var(--color-secundario);
+    border: none;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 0.9rem;
+    cursor: pointer;
+    letter-spacing: 1.5px;
+    transition: opacity 0.2s, transform 0.1s;
+}
+
+.form-content .btn-submit:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+}
+
+.form-content .btn-submit:active {
+    transform: translateY(0);
+}
+
+/* Mensaje de estado del login */
+.msg {
+    text-align: center;
+    margin-top: 12px;
+    font-size: 0.9rem;
+    color: rgba(255,255,255,0.8);
+    min-height: 20px;
+}
+
+
+/* =========================================
+   3. ESTRUCTURA DEL DASHBOARD
+   ========================================= */
+.dashboard-container {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    width: 250px;
+    background: var(--color-secundario);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: white;
+    font-weight: 800;
+    margin-bottom: 40px;
+    font-size: 1.1rem;
+}
+
+.mini-logo { width: 40px; }
+
+.nav-links {
+    list-style: none;
+    flex-grow: 1;
+}
+
+.nav-links li a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    padding: 12px 14px;
+    display: block;
+    border-radius: 8px;
+    margin-bottom: 5px;
+    transition: 0.2s;
+    font-size: 0.95rem;
+}
+
+.nav-links li a.active,
+.nav-links li a:hover {
+    background: var(--color-primario);
+    color: var(--color-secundario);
+    font-weight: bold;
+}
+
+/* Pie del sidebar: cerrar sesión */
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid rgba(255,255,255,0.1);
+}
+
+.sidebar-footer a {
+    color: rgba(255,255,255,0.6);
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    transition: 0.2s;
+}
+
+.sidebar-footer a:hover {
+    background: rgba(255,255,255,0.08);
+    color: var(--danger);
+}
+
+.main-content {
+    flex: 1;
+    padding: 30px 35px;
+    color: var(--text-dark);
+    overflow-y: auto;
+}
+
+/* Encabezado de sección */
+.section-header {
+    margin-bottom: 24px;
+}
+
+.section-header h1 {
+    font-size: 1.65rem;
+    font-weight: 800;
+    color: var(--text-dark);
+}
+
+.section-header p {
+    margin-top: 4px;
+    font-size: 0.875rem;
+}
+
+
+/* =========================================
+   4. TARJETAS DE ESTADÍSTICAS (DASHBOARD)
+   ========================================= */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 18px 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    border-left: 4px solid var(--color-primario);
+}
+
+.stat-card h3 {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 8px;
+    letter-spacing: 0.5px;
+}
+
+.stat-number {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.stat-desc {
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+
+/* =========================================
+   5. SECCIÓN DE GRÁFICAS (DASHBOARD)
+   ========================================= */
+.charts-section {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    margin-bottom: 30px;
+}
+
+.chart-container {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+}
+
+.chart-container h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+}
+
+.pie-wrapper {
+    max-width: 260px;
+    margin: 0 auto;
+}
+
+
+/* =========================================
+   6. SECCIÓN DE REPORTES (DASHBOARD)
+   ========================================= */
+.reports-section {
+    margin-bottom: 30px;
+}
+
+.report-card {
+    background: var(--white);
+    border-radius: 15px;
+    padding: 25px 30px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.07);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.report-info h3 {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+}
+
+.report-info p {
+    font-size: 0.875rem;
+    color: #888;
+}
+
+.btn-download {
+    padding: 12px 24px;
+    background: var(--color-secundario);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: opacity 0.2s;
+}
+
+.btn-download:hover {
+    opacity: 0.85;
+}
+
+
+/* =========================================
+   7. TABLAS Y BUSCADOR
+   ========================================= */
+.table-container {
+    background: var(--white);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+    margin-top: 20px;
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    padding: 15px;
+    color: #666;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    border-bottom: 2px solid #eee;
+    text-align: left;
+}
+
+td {
+    padding: 15px;
+    border-bottom: 1px solid #f1f1f1;
+    font-size: 0.95rem;
+}
+
+tr:last-child td { border-bottom: none; }
+
+.search-box {
+    margin-bottom: 15px;
+}
+
+.search-box input {
+    width: 100%;
+    max-width: 400px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 0.95rem;
+    transition: border 0.2s;
+}
+
+.search-box input:focus {
+    border-color: var(--color-primario);
+}
+
+
+/* =========================================
+   8. FORMULARIOS (ESPACIOS / USUARIOS)
+   ========================================= */
+.form-container-white {
+    background: var(--white);
+    padding: 28px 32px;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+/* *** FIX PRINCIPAL ***
+   El grid se aplica directamente al <form class="grid-form">.
+   Los .input-group hijos deben fluir naturalmente en el grid. */
+.grid-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 25px;
+    align-items: start;
+}
+
+/* Cada grupo de input ocupa una columna */
+.grid-form .input-group {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Etiquetas oscuras en el dashboard (labels reales) */
+.form-container-white label,
+.form-container-white .input-group label {
+    color: var(--text-dark) !important;
+    font-weight: 700;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.grid-form input,
+.custom-select,
+.grid-form textarea {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    color: var(--text-dark);
+    background: #fff;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.grid-form input:focus,
+.custom-select:focus,
+.grid-form textarea:focus {
+    border-color: var(--color-primario);
+}
+
+.full-width { grid-column: span 2; }
+
+/* Checklist de equipamiento */
+.checklist-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+}
+
+.check-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: var(--text-dark);
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+
+/* =========================================
+   9. BOTONES Y COMPONENTES VISUALES
+   ========================================= */
+
+/* Botones principales de formulario */
+.form-actions {
+    grid-column: span 2;
+    display: flex;
+    gap: 15px;
+    margin-top: 10px;
+    align-items: center;
+}
+
+.btn-submit,
+.btn-cancelar {
+    padding: 10px 22px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.875rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.2s, background 0.2s;
+}
+
+/* Submit en el dashboard (diferente al del login) */
+.form-container-white .btn-submit,
+.grid-form .btn-submit {
+    background: var(--color-secundario);
+    color: white;
+    border: 2px solid var(--color-primario);
+}
+
+.form-container-white .btn-submit:hover,
+.grid-form .btn-submit:hover {
+    opacity: 0.85;
+}
+
+.btn-cancelar {
+    background: #e0e0e0;
+    color: #444;
+}
+
+.btn-cancelar:hover {
+    background: #d0d0d0;
+}
+
+/* Botones de acción en tablas (Iconos) */
+.btn-action {
+    width: 35px;
+    height: 35px;
+    border-radius: 6px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    border: none;
+    cursor: pointer;
+    margin-right: 5px;
+    transition: opacity 0.2s;
+    font-size: 0.85rem;
+}
+
+.btn-edit   { background: var(--color-primario);   color: var(--color-secundario); }
+.btn-delete { background: var(--danger);            color: white; }
+
+.btn-action:hover { opacity: 0.8; }
+
+/* Badges y Estados */
+.status {
+    padding: 5px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: bold;
+    display: inline-block;
+}
+
+.btn-morado {
+    background-color: #6f42c1; /* Morado estándar */
+    color: white;
+}
+
+.status-approved  { background: #d4edda; color: #155724; }
+.status-pending   { background: #fff3cd; color: #856404; }
+.status-suspended { background: #f8d7da; color: #721c24; }
+
+.badge { padding: 4px 12px; border-radius: 6px; font-size: 0.85rem; font-weight: 600; display: inline-block; }
+.badge-docente  { background: #e0e7ff; color: #4338ca; }
+.badge-admin    { background: #d1fae5; color: #059669; }
+.badge-personal { background: #fef3c7; color: #92400e; }
+
+/* --- Perfil en Sidebar como Botón Interactivo --- */
+.sidebar-user-link {
+    text-decoration: none; /* Quita el subrayado del link */
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    margin-bottom: 15px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+}
+
+.sidebar-user-link:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: var(--color-primario);
+    transform: translateX(5px); /* Se desplaza un poco a la derecha al pasar el mouse */
+}
+
+.sidebar-user-link .user-avatar {
+    width: 38px;
+    height: 38px;
+    background-color: var(--color-primario);
+    color: var(--color-secundario);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    flex-shrink: 0;
+    box-shadow: 0 0 10px rgba(62, 181, 188, 0.3);
+}
+
+.sidebar-user-link .user-info {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.3;
+}
+
+.sidebar-user-link .user-name {
+    color: white;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.sidebar-user-link .user-role {
+    color: var(--color-primario);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.9;
+}
+
+/* Ajuste del main-content (ya no necesita tanto espacio arriba) */
+.main-content {
+    padding-top: 30px !important; 
+}
+
+/* --- Estilos para Modales --- */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(40, 53, 102, 0.7);
+    display: none; /* Oculto por defecto */
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: white;
+    padding: 30px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 400px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+    animation: modalIn 0.3s ease-out;
+}
+
+@keyframes modalIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.modal-content h3 { color: var(--color-secundario); margin-bottom: 10px; }
+.modal-content p { color: #666; margin-bottom: 25px; font-size: 0.95rem; }
+
+.modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+
+/* =========================================
+   10. RESPONSIVO
+   ========================================= */
+@media (max-width: 1024px) {
+    .charts-section {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .login-container      { flex-direction: column; }
+    .login-branding       { display: none; }   /* ocultar branding en móvil */
+    .dashboard-container  { flex-direction: column; }
+    .sidebar              { width: 100%; height: auto; position: relative; }
+    .grid-form            { grid-template-columns: 1fr; }
+    .full-width           { grid-column: span 1; }
+    .form-actions         { flex-direction: column; grid-column: span 1; }
+    .form-actions .btn-submit,
+    .form-actions .btn-cancelar { width: 100%; }
+    .report-card          { flex-direction: column; align-items: flex-start; }
+    .stats-grid           { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 480px) {
+    .main-content { padding: 20px; }
+    .form-container-white { padding: 20px; }
+    .stats-grid   { grid-template-columns: 1fr; }
+}
+
+/* ... (Todo lo anterior se mantiene igual) ... */
+
+/* =========================================
+   11. MODALES Y LOADERS (Añadido)
+   ========================================= */
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; 
+    width: 100%; height: 100%;
+    background: rgba(40, 53, 102, 0.7); /* Basado en su color secundario */
+    display: none; /* Se activa con JS */
+    justify-content: center;
+    align-items: center;
+    z-index: 3000;
+    backdrop-filter: blur(4px);
+}
+
+.modal-content {
+    background: var(--white);
+    padding: 30px;
+    border-radius: 15px;
+    text-align: center;
+    max-width: 400px;
+    width: 90%;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+    color: var(--color-secundario);
+    margin-bottom: 10px;
+}
+
+.modal-content p {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* Animación de carga */
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid var(--color-primario);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 15px;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}

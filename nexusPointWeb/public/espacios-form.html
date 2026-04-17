@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Configurar Espacio | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        /* --- ESTILOS DEL MODAL DE ÉXITO --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(40, 53, 102, 0.7);
+            display: none; /* Se activa con JS */
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            animation: popIn 0.3s ease-out;
+        }
+        @keyframes popIn {
+            0% { transform: scale(0.8); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .icon-circle {
+            width: 70px;
+            height: 70px;
+            background: #d4edda;
+            color: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 35px;
+            margin: 0 auto 20px;
+        }
+        .btn-modal-ok {
+            background-color: var(--color-primario);
+            color: var(--color-secundario);
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            margin-top: 20px;
+            width: 100%;
+            transition: all 0.3s;
+        }
+        .btn-modal-ok:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(62, 181, 188, 0.3);
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+             <div class="sidebar-header">
+                <img src="img/logo.png" alt="NP" class="mini-logo">
+                <span>NexusPoint</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="solicitudes.html">Solicitudes</a></li>
+                <li><a href="espacios.html" class="active">Espacios</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="perfil.html" class="sidebar-user-link" style="border-color: var(--color-primario); background: rgba(255,255,255,0.1);">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">Súper Usuario</span>
+                    </div>
+                </a>
+                <a href="login.html" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header">
+                <h1 id="form-title">Nuevo <span class="text-primario">Espacio</span></h1>
+                <p style="color: var(--color-secundario)">Define las características y el equipamiento del lugar.</p>
+            </header>
+
+            <section class="form-container-white">
+                <form id="espacioForm" class="grid-form">
+                    
+                    <div class="input-group">
+                        <label style="color: var(--color-secundario)">Nombre del Espacio</label>
+                        <input type="text" placeholder="Ej: Laboratorio de Cómputo 1" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--color-secundario)">Tipo de Espacio</label>
+                        <select class="custom-select" required>
+                            <option value="" disabled selected>Selecciona tipo...</option>
+                            <option>Aula Magna</option>
+                            <option>Laboratorio</option>
+                            <option>Cubículo</option>
+                            <option>Sala de Juntas</option>
+                            <option>Auditorio</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--color-secundario)">Edificio</label>
+                        <select class="custom-select" required>
+                            <option value="" disabled selected>Selecciona edificio...</option>
+                            <option>Edificio A</option>
+                            <option>Edificio B</option>
+                            <option>Edificio C</option>
+                            <option>Edificio D</option>
+                            <option>Biblioteca</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--color-secundario)">Piso / Nivel</label>
+                        <select class="custom-select" required>
+                            <option value="" disabled selected>Selecciona nivel...</option>
+                            <option>Planta Baja</option>
+                            <option>Piso 1</option>
+                            <option>Piso 2</option>
+                            <option>Piso 3</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--color-secundario)">Capacidad (Personas)</label>
+                        <input type="number" placeholder="Ej: 35" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label style="color: var(--color-secundario)">Estatus Inicial</label>
+                        <select class="custom-select">
+                            <option>Disponible</option>
+                            <option>Mantenimiento</option>
+                            <option>Fuera de Servicio</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group full-width">
+                        <label style="color: var(--color-secundario); margin-bottom: 15px; display: block;">Equipamiento Disponible</label>
+                        <div class="checklist-grid">
+                            <label class="check-item"><input type="checkbox"> <span>Proyector / Cañón</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Pantalla Smart TV</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Aire Acondicionado</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Cómputo (PC/Laptops)</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Pizarrón Blanco</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Sistema de Audio</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Conexión Ethernet</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Wi-Fi Dedicado</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Cámara Web (Híbrido)</span></label>
+                            <label class="check-item"><input type="checkbox"> <span>Mobiliario Ergonómico</span></label>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="btn-submit">Guardar Espacio</button>
+                        <a href="espacios.html" class="btn-cancelar">Cancelar</a>
+                    </div>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <div id="successModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="icon-circle">✓</div>
+            <h2 id="modal-title" style="color: var(--color-secundario); margin-bottom: 10px;">¡Completado!</h2>
+            <p id="modal-message" style="color: #666;"></p>
+            <button class="btn-modal-ok" onclick="redirectToEspacios()">Continuar</button>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const isEdit = urlParams.has('id');
+
+        // 1. Cambiar título si es edición
+        if (isEdit) {
+            document.getElementById('form-title').innerHTML = 'Editar <span class="text-primario">Espacio</span>';
+        }
+
+        // 2. Manejar el envío del formulario
+        document.getElementById('espacioForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita que la página se recargue inmediatamente
+            
+            const message = isEdit ? "El espacio ha sido actualizado correctamente." : "El nuevo espacio ha sido registrado con éxito.";
+            const title = isEdit ? "Espacio Editado" : "Espacio Creado";
+
+            document.getElementById('modal-title').innerText = title;
+            document.getElementById('modal-message').innerText = message;
+            document.getElementById('successModal').style.display = 'flex';
+        });
+
+        // 3. Redirección
+        function redirectToEspacios() {
+            window.location.href = 'espacios.html';
+        }
+    </script>
+</body>
+</html>

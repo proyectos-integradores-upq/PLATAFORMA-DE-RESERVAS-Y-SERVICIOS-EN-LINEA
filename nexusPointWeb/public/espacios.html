@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Espacios | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        /* Estilo específico para convertir el enlace en un botón real y redondeado */
+        .btn-nuevo-espacio {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-secundario); /* El azul oscuro de tu marca */
+            color: white !important;
+            padding: 12px 28px;
+            border-radius: 50px; /* Súper redondeado tipo píldora */
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            border: 2px solid var(--color-primario); /* Borde turquesa para que resalte */
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(62, 181, 188, 0.2);
+        }
+
+        .btn-nuevo-espacio:hover {
+            background-color: var(--color-primario);
+            color: var(--color-secundario) !important;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(62, 181, 188, 0.4);
+        }
+
+        /* Contenedor de acciones para que no se amontonen los botones de la tabla */
+        .actions-wrapper {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        /* Asegurar que los botones de la tabla también sean redondeados */
+        .btn-action {
+            border-radius: 8px; /* Redondeo suave para iconos */
+        }
+
+        /* --- ESTILOS DEL MODAL DE ELIMINACIÓN --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(40, 53, 102, 0.7);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 3000;
+            backdrop-filter: blur(4px);
+        }
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        }
+        .modal-btns {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .btn-confirm-delete {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: background 0.3s;
+        }
+        .btn-confirm-delete:hover {
+            background-color: #c0392b;
+        }
+        .btn-cancel {
+            background-color: #eee;
+            color: #333;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="NP" class="mini-logo">
+                <span>NexusPoint</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="solicitudes.html">Solicitudes</a></li>
+                <li><a href="espacios.html" class="active">Espacios</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="perfil.html" class="sidebar-user-link" style="border-color: var(--color-primario); background: rgba(255,255,255,0.1);">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">Súper Usuario</span>
+                    </div>
+                </a>
+                <a href="login.html" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+                <div>
+                    <h1>Gestión de <span class="text-primario">Espacios</span></h1>
+                    <p style="color: var(--color-secundario); opacity: 0.8;">Administra el catálogo de aulas y laboratorios.</p>
+                </div>
+                
+                <a href="espacios-form.html" class="btn-nuevo-espacio">
+                    + Agregar Espacio
+                </a>
+            </header>
+
+            <section class="search-bar-container">
+                <div class="search-box">
+                    <input type="text" id="searchInput" placeholder="Buscar por espacio o ubicación..." onkeyup="filterTable()">
+                </div>
+            </section>
+
+            <section class="table-container">
+                <table id="espaciosTable">
+                    <thead>
+                        <tr>
+                            <th>Espacio</th>
+                            <th>Tipo</th>
+                            <th>Capacidad</th>
+                            <th>Ubicación</th>
+                            <th>Estatus</th>
+                            <th style="text-align: center;">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Laboratorio 1</strong></td>
+                            <td>Laboratorio</td>
+                            <td>30 Personas</td>
+                            <td>Edificio C - Piso 1</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=1" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Laboratorio 1')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cubículo 2</strong></td>
+                            <td>Asesoría</td>
+                            <td>2 Personas</td>
+                            <td>Edificio D - Planta Alta</td>
+                            <td><span class="status status-pending">Ocupado</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=2" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Cubículo 2')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Auditorio Central</strong></td>
+                            <td>Conferencias</td>
+                            <td>150 Personas</td>
+                            <td>Edificio A - Planta Baja</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=3" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Auditorio Central')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sala de Cómputo B</strong></td>
+                            <td>Informática</td>
+                            <td>40 Personas</td>
+                            <td>Edificio B - Piso 2</td>
+                            <td><span class="status status-pending">Ocupado</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=4" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Sala de Cómputo B')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Taller de Mecatrónica</strong></td>
+                            <td>Ingeniería</td>
+                            <td>25 Personas</td>
+                            <td>Edificio G - Planta Baja</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=5" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Taller de Mecatrónica')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Biblioteca - Área Silenciosa</strong></td>
+                            <td>Estudio</td>
+                            <td>60 Personas</td>
+                            <td>Edificio E - Piso 1</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=6" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Biblioteca - Área Silenciosa')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Laboratorio de Química</strong></td>
+                            <td>Ciencias</td>
+                            <td>20 Personas</td>
+                            <td>Edificio C - Piso 2</td>
+                            <td><span class="status status-pending">Ocupado</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=7" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Laboratorio de Química')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sala de Juntas 1</strong></td>
+                            <td>Reunión</td>
+                            <td>10 Personas</td>
+                            <td>Edificio A - Piso 1</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=8" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Sala de Juntas 1')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Aula Magna</strong></td>
+                            <td>Teoría</td>
+                            <td>80 Personas</td>
+                            <td>Edificio F - Planta Baja</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=9" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Aula Magna')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cancha de Fútbol</strong></td>
+                            <td>Deportes</td>
+                            <td>22 Personas</td>
+                            <td>Zona Exterior</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=10" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Cancha de Fútbol')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sala Audiovisual</strong></td>
+                            <td>Multimedia</td>
+                            <td>45 Personas</td>
+                            <td>Edificio E - Planta Baja</td>
+                            <td><span class="status status-pending">Ocupado</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=11" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Sala Audiovisual')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Laboratorio de Física</strong></td>
+                            <td>Ciencias</td>
+                            <td>25 Personas</td>
+                            <td>Edificio C - Piso 1</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=12" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Laboratorio de Física')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cubículo 5</strong></td>
+                            <td>Asesoría</td>
+                            <td>4 Personas</td>
+                            <td>Biblioteca - Piso 2</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=13" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Cubículo 5')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Taller de Dibujo</strong></td>
+                            <td>Artes</td>
+                            <td>20 Personas</td>
+                            <td>Edificio G - Planta Alta</td>
+                            <td><span class="status status-pending">Ocupado</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=14" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Taller de Dibujo')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><strong>Sala de Juicios Orales</strong></td>
+                            <td>Derecho</td>
+                            <td>50 Personas</td>
+                            <td>Edificio D - Planta Baja</td>
+                            <td><span class="status status-approved">Disponible</span></td>
+                            <td>
+                                <div class="actions-wrapper">
+                                    <a href="espacios-form.html?id=15" class="btn-action btn-edit">✎</a>
+                                    <button class="btn-action btn-delete" onclick="openDeleteModal('Sala de Juicios Orales')">🗑</button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </div>
+
+    <div id="deleteModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 style="color: var(--color-secundario); margin-bottom: 10px;">¿Eliminar espacio?</h2>
+            <p style="color: #666;">Estás a punto de eliminar <strong id="espacioNombre"></strong>. Esta acción no se puede deshacer.</p>
+            <div class="modal-btns">
+                <button class="btn-cancel" onclick="closeDeleteModal()">Cancelar</button>
+                <button class="btn-confirm-delete" onclick="confirmDelete()">Eliminar Permanentemente</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let espacioAEliminar = "";
+
+        function openDeleteModal(nombre) {
+            espacioAEliminar = nombre;
+            document.getElementById('espacioNombre').innerText = nombre;
+            document.getElementById('deleteModal').style.display = 'flex';
+        }
+
+        function closeDeleteModal() {
+            document.getElementById('deleteModal').style.display = 'none';
+        }
+
+        function confirmDelete() {
+            alert(espacioAEliminar + " ha sido eliminado correctamente.");
+            closeDeleteModal();
+        }
+
+        function filterTable() {
+            const input = document.getElementById("searchInput");
+            const filter = input.value.toUpperCase();
+            const table = document.getElementById("espaciosTable");
+            const tr = table.getElementsByTagName("tr");
+
+            for (let i = 1; i < tr.length; i++) {
+                const cells = tr[i].getElementsByTagName("td");
+                let match = false;
+                if (cells.length > 0) {
+                    const text = cells[0].innerText + " " + cells[3].innerText;
+                    if (text.toUpperCase().indexOf(filter) > -1) {
+                        match = true;
+                    }
+                }
+                tr[i].style.display = match ? "" : "none";
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Dashboard | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="NP" class="mini-logo">
+                <span>NexusPoint</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html" class="active">Dashboard</a></li>
+                <li><a href="solicitudes.html">Solicitudes</a></li>
+                <li><a href="espacios.html">Espacios</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="perfil.html" class="sidebar-user-link">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">Súper Usuario</span>
+                    </div>
+                </a>
+                <a href="login.html" class="logout-link" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header">
+                <h1>Panel de <span class="text-primario">Estadísticas</span></h1>
+                <p>Bienvenido al sistema de gestión NexusPoint</p>
+            </header>
+
+            <section class="stats-grid">
+                <div class="stat-card">
+                    <h3>Solicitudes Totales</h3>
+                    <p class="stat-number">1,248</p>
+                    <span class="stat-desc">Este mes</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Espacios Activos</h3>
+                    <p class="stat-number">42</p>
+                    <span class="stat-desc">En toda la institución</span>
+                </div>
+                <div class="stat-card">
+                    <h3>Aprobación</h3>
+                    <p class="stat-number">85%</p>
+                    <span class="stat-desc">Tasa de éxito</span>
+                </div>
+            </section>
+
+            <section class="charts-section">
+                <div class="chart-container">
+                    <h3>Días con más solicitudes</h3>
+                    <canvas id="barChart"></canvas>
+                </div>
+                <div class="chart-container">
+                    <h3>Ocupación por Edificio</h3>
+                    <div class="pie-wrapper">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                </div>
+            </section>
+
+            <section class="reports-section">
+                <div class="report-card">
+                    <div class="report-info">
+                        <h3>Historial Mensual - Marzo 2026</h3>
+                        <p>Reporte completo de todas las solicitudes, ocupación y estadísticas del mes.</p>
+                    </div>
+                    <button class="btn-download">Exportar Reporte (PDF)</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div id="modalDescarga" class="modal-overlay">
+        <div class="modal-content">
+            <div class="loader"></div>
+            <h3>Descargando reporte...</h3>
+            <p>Por favor, espera un momento mientras generamos tu archivo PDF.</p>
+        </div>
+    </div>
+
+    <script src="js/dashboard.js"></script>
+</body>
+</html>

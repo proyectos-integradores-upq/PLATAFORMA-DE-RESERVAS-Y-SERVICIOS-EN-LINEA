@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Mi Perfil | NexusPoint</title>
+    <link rel="stylesheet" href="css/app.css">
+    <style>
+        /* RECUPERANDO ESTILOS PREMIUM */
+        .profile-header-card {
+            background: linear-gradient(135deg, var(--color-secundario) 0%, #344484 100%);
+            border-radius: 15px;
+            padding: 40px;
+            color: white;
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 25px rgba(40, 53, 102, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Efecto decorativo de fondo */
+        .profile-header-card::after {
+            content: "";
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 150px;
+            height: 150px;
+            background: rgba(62, 181, 188, 0.1);
+            border-radius: 50%;
+        }
+
+        .profile-avatar-big {
+            width: 110px;
+            height: 110px;
+            background-color: var(--color-primario);
+            color: var(--color-secundario);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.8rem;
+            font-weight: 800;
+            border: 5px solid rgba(255,255,255,0.15);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+
+        .profile-info-main h2 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+            font-weight: 800;
+        }
+
+        .profile-info-main p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 25px;
+        }
+
+        .info-card {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+        }
+
+        .info-card h3 {
+            margin-bottom: 25px;
+            color: var(--color-secundario);
+            border-bottom: 2px solid #f0f4f8;
+            padding-bottom: 12px;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .detail-group { margin-bottom: 20px; }
+        .detail-group label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: #999;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+        }
+
+        .detail-group p {
+            font-size: 1.05rem;
+            color: var(--color-secundario);
+            font-weight: 600;
+        }
+
+        /* Botón Estilo Cápsula Nexus */
+        .btn-nexus {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--color-secundario);
+            color: white !important;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            border: 2px solid var(--color-primario);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .btn-nexus:hover {
+            background-color: var(--color-primario);
+            color: var(--color-secundario) !important;
+            box-shadow: 0 5px 15px rgba(62, 181, 188, 0.4);
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <img src="img/logo.png" alt="NP" class="mini-logo">
+                <span>NexusPoint</span>
+            </div>
+            <ul class="nav-links">
+                <li><a href="dashboard.html">Dashboard</a></li>
+                <li><a href="solicitudes.html">Solicitudes</a></li>
+                <li><a href="espacios.html">Espacios</a></li>
+                <li><a href="usuarios.html">Usuarios</a></li>
+                <li><a href="reportes.html">Reportes</a></li>
+            </ul>
+            <div class="sidebar-footer">
+                <a href="perfil.html" class="sidebar-user-link" style="border-color: var(--color-primario); background: rgba(255,255,255,0.1);">
+                    <div class="user-avatar">A</div>
+                    <div class="user-info">
+                        <span class="user-name">Administrador</span>
+                        <span class="user-role">Súper Usuario</span>
+                    </div>
+                </a>
+                <a href="login.html" style="color: var(--danger); padding-left: 12px; font-size: 0.85rem; text-decoration: none; font-weight: 600;">Cerrar Sesión</a>
+            </div>
+        </nav>
+
+        <main class="main-content">
+            <header class="section-header">
+                <div>
+                    <h1>Mi <span class="text-primario">Perfil</span></h1>
+                    <p>Gestiona tu presencia en la plataforma NexusPoint.</p>
+                </div>
+            </header>
+
+            <section class="profile-header-card">
+                <div class="profile-avatar-big">A</div>
+                <div class="profile-info-main">
+                    <h2>Administrador General</h2>
+                    <p>admin.central@nexuspoint.edu.mx</p>
+                </div>
+            </section>
+
+            <div class="profile-grid">
+                <section class="info-card">
+                    <h3>Información Personal</h3>
+                    <div class="grid-form" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div class="detail-group"><label>Nombre</label><p>Admin Principal</p></div>
+                        <div class="detail-group"><label>Matrícula</label><p>NP-2026-001</p></div>
+                        <div class="detail-group"><label>Departamento</label><p>Sistemas / TI</p></div>
+                        <div class="detail-group"><label>Rol</label><p>Super Administrador</p></div>
+                    </div>
+                    <a href="perfil-form.html" class="btn-nexus" style="margin-top: 20px;">Editar mi Información</a>
+                </section>
+
+                <section class="info-card">
+                    <h3>Seguridad</h3>
+                    <form id="passForm">
+                        <div class="input-group" style="margin-bottom: 20px;">
+                            <label style="color: var(--color-secundario); font-weight: 700; font-size: 0.8rem; display: block; margin-bottom: 8px;">NUEVA CONTRASEÑA</label>
+                            <input type="password" placeholder="Mínimo 8 caracteres" required style="width: 100%; padding: 12px; border-radius: 10px; border: 1px solid #ddd; outline: none;">
+                        </div>
+                        <button type="button" class="btn-nexus" onclick="showModal('confirmPassModal')">Actualizar Acceso</button>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+
+    <div id="confirmPassModal" class="modal-overlay">
+        <div class="modal-content">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🔑</div>
+            <h3>¿Cambiar contraseña?</h3>
+            <p>Por seguridad, se registrará este cambio en el historial de acceso.</p>
+            <div class="modal-actions">
+                <button class="btn-cancelar" onclick="hideModal('confirmPassModal')" style="border-radius: 50px;">Cancelar</button>
+                <button class="btn-submit" onclick="savePass()" style="border-radius: 50px; background: var(--color-secundario); color: white; border: 2px solid var(--color-primario);">Sí, confirmar</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showModal(id) { document.getElementById(id).style.display = 'flex'; }
+        function hideModal(id) { document.getElementById(id).style.display = 'none'; }
+        function savePass() {
+            alert("¡Contraseña actualizada con éxito!");
+            hideModal('confirmPassModal');
+        }
+        
+    </script>
+</body>
+</html>
